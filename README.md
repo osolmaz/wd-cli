@@ -18,6 +18,13 @@ make build
 ./bin/wikidata-cli --help
 ```
 
+Release-like build with embedded `version/commit/date` metadata:
+
+```bash
+make release
+./bin/wikidata-cli version
+```
+
 ## Commands
 
 - `search-items <query>`
@@ -54,3 +61,9 @@ wikidata-cli --json search-items "Douglas Adams"
 - `USER_AGENT` (recommended to set a descriptive value)
 - `REQUEST_TIMEOUT_SECONDS` (default `15`)
 
+## Operational docs
+
+- [Usage guide](docs/operations/usage.md)
+- [Configuration guide](docs/operations/configuration.md)
+- [Troubleshooting guide](docs/operations/troubleshooting.md)
+- [Release guide](docs/operations/release.md)
