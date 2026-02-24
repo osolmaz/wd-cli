@@ -1,14 +1,16 @@
 # wikidata-cli
 
-Production-oriented Go CLI for Wikidata exploration and querying, modeled after robust multi-command CLIs.
+`wikidata-cli` is a production-oriented native Go CLI for Wikidata exploration and querying.
 
 ## Features
 
-- MCP-parity commands for the current Wikimedia Wikidata MCP toolset
+- Native CLI commands for item/property search, statement lookup, statement value extraction, hierarchy traversal, and SPARQL execution
 - Human-friendly text output by default
 - Script-friendly JSON output via `--json`
 - Configurable endpoints, timeout, and `User-Agent`
 - Vector-first search with keyword fallback
+
+Parity note: command coverage tracks the original Wikidata MCP implementations as a reference baseline: [zzaebok/mcp-wikidata](https://github.com/zzaebok/mcp-wikidata) and [philippesaade-wmde/WikidataMCP](https://github.com/philippesaade-wmde/WikidataMCP).
 
 ## Install / Build
 
