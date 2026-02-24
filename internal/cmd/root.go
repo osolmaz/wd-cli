@@ -52,8 +52,15 @@ func NewRootCommand() *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:           "wikidata-cli",
-		Short:         "Wikidata command-line client with MCP-equivalent tooling",
+		Use:   "wikidata-cli",
+		Short: "Explore and query Wikidata from your terminal",
+		Long: `Explore and query Wikidata from your terminal.
+
+Use the commands below to search items and properties, inspect statements,
+traverse hierarchies, and run SPARQL queries.`,
+		Example: `  wikidata-cli search-items "Douglas Adams"
+  wikidata-cli get-statements Q42
+  wikidata-cli --json execute-sparql 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'`,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(_ *cobra.Command, _ []string) error {
@@ -84,7 +91,7 @@ func NewRootCommand() *cobra.Command {
 		&opts.JSON,
 		"json",
 		false,
-		"Output JSON to stdout",
+		"Write output as JSON",
 	)
 	cmd.PersistentFlags().DurationVar(
 		&opts.Timeout,

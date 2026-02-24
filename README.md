@@ -1,6 +1,6 @@
 # wikidata-cli
 
-`wikidata-cli` is a production-oriented native Go CLI for Wikidata exploration and querying.
+`wikidata-cli` is a native Go CLI for exploring and querying Wikidata.
 
 ## Features
 
@@ -20,7 +20,7 @@ make build
 ./bin/wikidata-cli --help
 ```
 
-Release-like build with embedded `version/commit/date` metadata:
+Build with embedded `version/commit/date` metadata:
 
 ```bash
 make release

@@ -26,12 +26,12 @@ Flags are defined at the root command and apply to all subcommands.
 - `TEXTIFER_URI` or `TEXTIFIER_URI` (default `https://wd-textify.wmcloud.org`)
 - `VECTOR_SEARCH_URI` (default `https://wd-vectordb.wmcloud.org`)
 - `WD_VECTORDB_API_SECRET` (optional)
-- `USER_AGENT` (strongly recommended in production)
+- `USER_AGENT` (recommended)
 - `REQUEST_TIMEOUT_SECONDS` (supports integer or float seconds, must be `> 0`)
 
-## Production recommendations
+## Recommended settings
 
 - Set a descriptive `USER_AGENT` with team/project contact information.
-- Set explicit service endpoint URLs in non-production and test environments.
+- Set explicit service endpoint URLs in test or custom environments.
 - Start with `REQUEST_TIMEOUT_SECONDS=15` and tune based on observed latency.
 - Provide `WD_VECTORDB_API_SECRET` only when required by your vector endpoint.
