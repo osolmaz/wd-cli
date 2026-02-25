@@ -34,6 +34,46 @@ npm install -g @osolmaz/wd-cli
 wd-cli --help
 ```
 
+### Build from source
+
+```bash
+git clone https://github.com/osolmaz/wd-cli.git
+cd wd-cli
+npm ci
+npm run build
+node dist/cli.js --help
+```
+
+## Commands
+
+A practical default flow is:
+
+`resolve -> profile -> statements/hierarchy/sparql`
+
+- `resolve <query>`
+  Start from plain text (for example, a person or organization name) and get likely Wikidata entity matches with confidence hints.
+
+- `profile <entity-id>` (`--type company|person|place`)
+  Get a concise, curated summary for an entity instead of raw claim dumps. Best when you already have a QID and want a quick answer.
+
+- `search-items <query>`
+  Find Wikidata items (QIDs) by keyword/vector search. Useful when you want broader discovery results than `resolve`.
+
+- `search-properties <query>`
+  Find Wikidata properties (PIDs) such as `occupation`, `country`, or `official website` before querying specific statements.
+
+- `get-statements <entity-id>`
+  Return direct statements for an entity in text form. Use this when you want a wide fact overview for one QID.
+
+- `get-statement-values <entity-id> <property-id>`
+  Inspect one property deeply, including ranks, qualifiers, and references. Use this when detail and provenance matter.
+
+- `get-instance-and-subclass-hierarchy <entity-id>`
+  Walk `instance of` and `subclass of` relationships from a starting entity. Useful for classification and context.
+
+- `execute-sparql [query]`
+  Run custom SPARQL against Wikidata Query Service for advanced filters and graph patterns.
+
 ## Agent Skill (skillflag)
 
 `wd-cli` bundles a `wikidata` agent skill under `skills/wikidata`.
@@ -62,17 +102,9 @@ Install it into your coding agent (example: Codex repo scope):
 wd-cli --skill export wikidata | npx skillflag install --agent codex --scope repo
 ```
 
-### Build from source
-
-```bash
-git clone https://github.com/osolmaz/wd-cli.git
-cd wd-cli
-npm ci
-npm run build
-node dist/cli.js --help
-```
-
 ## Usage Examples
+
+General examples:
 
 ```bash
 wd-cli resolve "Marie Curie"
@@ -106,17 +138,6 @@ Equivalent one-shot usage with no install:
 ```bash
 npx -y @osolmaz/wd-cli --json search-items "Douglas Adams"
 ```
-
-## Commands
-
-- `search-items <query>`
-- `search-properties <query>`
-- `resolve <query>`
-- `profile <entity-id>` (`--type company|person|place`)
-- `get-statements <entity-id>`
-- `get-statement-values <entity-id> <property-id>`
-- `get-instance-and-subclass-hierarchy <entity-id>`
-- `execute-sparql [query]`
 
 ## Environment Variables
 
