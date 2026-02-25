@@ -36,7 +36,7 @@ Default journey:
 Command concept:
 
 ```bash
-wd-cli resolve "Hartree"
+wd-cli resolve "Marie Curie"
 ```
 
 Behavior:
@@ -54,7 +54,7 @@ Why it helps:
 Command concept:
 
 ```bash
-wd-cli profile Q113465975 --type company
+wd-cli profile Q7186 --type person
 ```
 
 Behavior:
@@ -72,8 +72,8 @@ Why it helps:
 Command concepts:
 
 ```bash
-wd-cli neighbors Q113465975
-wd-cli relate Q113465975 Q145
+wd-cli neighbors Q7186
+wd-cli relate Q7186 Q142
 ```
 
 Behavior:
@@ -107,8 +107,8 @@ Why it helps:
 Command concepts:
 
 ```bash
-wd-cli watch Q113465975
-wd-cli diff Q113465975 --since 30d
+wd-cli watch Q7186
+wd-cli diff Q7186 --since 30d
 ```
 
 Behavior:

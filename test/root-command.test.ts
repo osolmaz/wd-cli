@@ -163,9 +163,9 @@ test("resolve action parses options and calls search-items path", async () => {
         source: "keyword",
         results: [
           {
-            id: "Q113465975",
-            label: "Hartree",
-            description: "commodity trading company",
+            id: "Q7186",
+            label: "Marie Curie",
+            description: "Polish and naturalized-French physicist and chemist",
           },
         ],
       };
@@ -174,7 +174,7 @@ test("resolve action parses options and calls search-items path", async () => {
 
   const { command, output } = commandWithClient(stubClient);
   await command.parseAsync(
-    ["resolve", "Hartree", "--lang", "tr", "--limit", "4", "--no-vector"],
+    ["resolve", "Marie Curie", "--lang", "tr", "--limit", "4", "--no-vector"],
     {
       from: "user",
     },
@@ -182,13 +182,16 @@ test("resolve action parses options and calls search-items path", async () => {
 
   assert.deepEqual(calls, [
     {
-      query: "Hartree",
+      query: "Marie Curie",
       lang: "tr",
       limit: 4,
       disableVector: true,
     },
   ]);
-  assert.match(output(), /1\. Q113465975: Hartree — commodity trading company/);
+  assert.match(
+    output(),
+    /1\. Q7186: Marie Curie — Polish and naturalized-French physicist and chemist/,
+  );
 });
 
 test("profile action parses typed options", async () => {
@@ -206,8 +209,8 @@ test("profile action parses typed options", async () => {
         profile_type: profileType,
         lang,
         fetched_at: "2026-02-25T18:00:00.000Z",
-        label: "Hartree",
-        description: "commodity trading company",
+        label: "Marie Curie",
+        description: "Polish and naturalized-French physicist and chemist",
         fields: {},
         sources: {
           provider: "https://wd-textify.wmcloud.org",
@@ -218,20 +221,17 @@ test("profile action parses typed options", async () => {
   } as unknown as Client;
 
   const { command, output } = commandWithClient(stubClient);
-  await command.parseAsync(
-    ["profile", "Q113465975", "--type", "company", "--lang", "de"],
-    {
-      from: "user",
-    },
-  );
+  await command.parseAsync(["profile", "Q7186", "--type", "person", "--lang", "de"], {
+    from: "user",
+  });
 
   assert.deepEqual(calls, [
     {
-      entityID: "Q113465975",
-      profileType: "company",
+      entityID: "Q7186",
+      profileType: "person",
       lang: "de",
     },
   ]);
-  assert.match(output(), /Hartree \(Q113465975\)/);
-  assert.match(output(), /Profile type: company/);
+  assert.match(output(), /Marie Curie \(Q7186\)/);
+  assert.match(output(), /Profile type: person/);
 });

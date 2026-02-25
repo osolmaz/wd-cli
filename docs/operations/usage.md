@@ -64,8 +64,8 @@ wd-cli --json search-items "Douglas Adams"
 ## Common command examples
 
 ```bash
-wd-cli resolve "Hartree"
-wd-cli profile Q113465975 --type company
+wd-cli resolve "Marie Curie"
+wd-cli profile Q7186 --type person
 wd-cli search-items "Douglas Adams"
 wd-cli search-properties "occupation"
 wd-cli get-statements Q42

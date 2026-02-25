@@ -204,10 +204,10 @@ test("getProfile returns normalized company fields", async () => {
       res.setHeader("Content-Type", "application/json");
       res.end(
         JSON.stringify({
-          Q113465975: {
-            QID: "Q113465975",
-            label: "Hartree",
-            description: "commodity trading company",
+          Q999999: {
+            QID: "Q999999",
+            label: "Example Company",
+            description: "example holding company",
             claims: [
               {
                 PID: "P31",
@@ -254,7 +254,7 @@ test("getProfile returns normalized company fields", async () => {
                 datatype: "url",
                 values: [
                   {
-                    value: "https://www.hartreepartners.com",
+                    value: "https://example.com",
                     rank: "normal",
                     references: [],
                   },
@@ -267,23 +267,23 @@ test("getProfile returns normalized company fields", async () => {
     },
     async (baseURL) => {
       const client = new Client(testConfig(baseURL));
-      const profile = await client.getProfile("Q113465975", "company", "en");
+      const profile = await client.getProfile("Q999999", "company", "en");
 
       assert.match(gotPIDParam, /P31/);
       assert.match(gotPIDParam, /P17/);
       assert.match(gotPIDParam, /P856/);
       assert.equal(gotLang, "en");
 
-      assert.equal(profile.entity_id, "Q113465975");
+      assert.equal(profile.entity_id, "Q999999");
       assert.equal(profile.profile_type, "company");
-      assert.equal(profile.label, "Hartree");
-      assert.equal(profile.description, "commodity trading company");
+      assert.equal(profile.label, "Example Company");
+      assert.equal(profile.description, "example holding company");
       assert.equal(profile.fields.instance_of.values[0].display, "business");
       assert.equal(profile.fields.instance_of.values[0].reference_count, 1);
       assert.equal(profile.fields.country.values[0].entity_id, "Q334");
       assert.equal(
         profile.fields.official_website.values[0].display,
-        "https://www.hartreepartners.com",
+        "https://example.com",
       );
       assert.equal(profile.sources.provider, `${baseURL}/textify`);
     },

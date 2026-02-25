@@ -8,12 +8,12 @@ import { createBufferWriter } from "./output-test-helpers.js";
 
 function companyProfile(): ProfileResult {
   return {
-    entity_id: "Q113465975",
+    entity_id: "Q999999",
     profile_type: "company",
     lang: "en",
     fetched_at: "2026-02-25T18:00:00.000Z",
-    label: "Hartree",
-    description: "commodity trading company",
+    label: "Example Company",
+    description: "example holding company",
     fields: {
       instance_of: {
         label: "Instance of",
@@ -53,7 +53,7 @@ function companyProfile(): ProfileResult {
         property_ids: ["P856"],
         values: [
           {
-            display: "https://www.hartreepartners.com",
+            display: "https://example.com",
             source_property_id: "P856",
             source_property_label: "official website",
             rank: "normal",
@@ -110,11 +110,11 @@ test("runProfileCommand formats concise text profile", async () => {
 
   await runProfileCommand(
     opts,
-    "Q113465975",
+    "Q999999",
     "company",
     "en",
     async (entityID, profileType, lang) => {
-      assert.equal(entityID, "Q113465975");
+      assert.equal(entityID, "Q999999");
       assert.equal(profileType, "company");
       assert.equal(lang, "en");
       return companyProfile();
@@ -122,7 +122,7 @@ test("runProfileCommand formats concise text profile", async () => {
   );
 
   const got = out.output();
-  assert.match(got, /^Hartree \(Q113465975\)/m);
+  assert.match(got, /^Example Company \(Q999999\)/m);
   assert.match(got, /Profile type: company/);
   assert.match(got, /Instance of:\n- business \[Q4830453\] \(refs: 1\)/);
   assert.match(got, /Country:\n- Singapore \[Q334\]/);
@@ -152,10 +152,10 @@ test("runProfileCommand JSON output mirrors result schema", async () => {
   opts.json = true;
 
   const expected = companyProfile();
-  await runProfileCommand(opts, "Q113465975", "company", "en", async () => expected);
+  await runProfileCommand(opts, "Q999999", "company", "en", async () => expected);
 
   const payload = JSON.parse(out.output()) as Record<string, unknown>;
-  assert.equal(payload.entity_id, "Q113465975");
+  assert.equal(payload.entity_id, "Q999999");
   assert.equal(payload.profile_type, "company");
   assert.equal(payload.fetched_at, "2026-02-25T18:00:00.000Z");
   assert.ok(payload.fields);

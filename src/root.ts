@@ -85,7 +85,7 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .description("Explore and query Wikidata from your terminal")
     .addHelpText(
       "after",
-      '\nExamples:\n  wd-cli resolve "Hartree"\n  wd-cli profile Q113465975 --type company\n  wd-cli search-items "Douglas Adams"\n  wd-cli get-statements Q42\n  wd-cli --json execute-sparql \'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2\'',
+      '\nExamples:\n  wd-cli resolve "Marie Curie"\n  wd-cli profile Q7186 --type person\n  wd-cli search-items "Douglas Adams"\n  wd-cli get-statements Q42\n  wd-cli --json execute-sparql \'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2\'',
     )
     .showSuggestionAfterError()
     .exitOverride();

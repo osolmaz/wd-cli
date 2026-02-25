@@ -11,12 +11,12 @@ test("runResolveCommand formats disambiguation output", async () => {
 
   await runResolveCommand(
     opts,
-    "Hartree",
+    "Marie Curie",
     "en",
     3,
     false,
     async (query, lang, limit, disableVector) => {
-      assert.equal(query, "Hartree");
+      assert.equal(query, "Marie Curie");
       assert.equal(lang, "en");
       assert.equal(limit, 3);
       assert.equal(disableVector, false);
@@ -25,14 +25,14 @@ test("runResolveCommand formats disambiguation output", async () => {
         source: "keyword",
         results: [
           {
-            id: "Q113465975",
-            label: "Hartree",
-            description: "commodity trading company",
+            id: "Q7186",
+            label: "Marie Curie",
+            description: "Polish and naturalized-French physicist and chemist",
           },
           {
             id: "Q123",
-            label: "Hartree Partners",
-            description: "",
+            label: "Marie Curie (film)",
+            description: "2016 biographical film",
           },
         ],
       };
@@ -40,11 +40,14 @@ test("runResolveCommand formats disambiguation output", async () => {
   );
 
   const got = out.output();
-  assert.match(got, /1\. Q113465975: Hartree — commodity trading company/);
+  assert.match(
+    got,
+    /1\. Q7186: Marie Curie — Polish and naturalized-French physicist and chemist/,
+  );
   assert.match(got, /\[high confidence; exact label match, top search result\]/);
   assert.match(
     got,
-    /2\. Q123: Hartree Partners \[medium confidence; strong label overlap\]/,
+    /2\. Q123: Marie Curie \(film\) — 2016 biographical film \[medium confidence; strong label overlap\]/,
   );
 });
 
@@ -65,13 +68,13 @@ test("runResolveCommand JSON payload is stable", async () => {
   const opts = testRootOptions(out.writer);
   opts.json = true;
 
-  await runResolveCommand(opts, "Hartree", "en", 1, false, async () => ({
+  await runResolveCommand(opts, "Marie Curie", "en", 1, false, async () => ({
     source: "vector",
     results: [],
   }));
 
   const payload = JSON.parse(out.output()) as Record<string, unknown>;
-  assert.equal(payload.query, "Hartree");
+  assert.equal(payload.query, "Marie Curie");
   assert.equal(payload.lang, "en");
   assert.equal(payload.limit, 1);
   assert.equal(payload.source, "vector");
@@ -84,18 +87,18 @@ test("runResolveCommand marks non-top exact label candidates as high confidence"
   const opts = testRootOptions(out.writer);
   opts.json = true;
 
-  await runResolveCommand(opts, "Hartree", "en", 2, false, async () => ({
+  await runResolveCommand(opts, "Curie", "en", 2, false, async () => ({
     source: "keyword",
     results: [
       {
-        id: "Q476572",
-        label: "Hartree energy",
-        description: "atomic unit of energy",
+        id: "Q7076",
+        label: "Curie temperature",
+        description: "critical point in magnetic materials",
       },
       {
-        id: "Q56423571",
-        label: "Hartree",
-        description: "family name",
+        id: "Q1212947",
+        label: "Curie",
+        description: "obsolete unit of radioactivity",
       },
     ],
   }));
@@ -103,6 +106,6 @@ test("runResolveCommand marks non-top exact label candidates as high confidence"
   const payload = JSON.parse(out.output()) as {
     candidates: Array<{ id: string; confidence: string }>;
   };
-  assert.equal(payload.candidates[1].id, "Q56423571");
+  assert.equal(payload.candidates[1].id, "Q1212947");
   assert.equal(payload.candidates[1].confidence, "high");
 });

@@ -75,8 +75,8 @@ node dist/cli.js --help
 ## Usage Examples
 
 ```bash
-wd-cli resolve "Hartree"
-wd-cli profile Q113465975 --type company
+wd-cli resolve "Marie Curie"
+wd-cli profile Q7186 --type person
 wd-cli search-items "Douglas Adams"
 wd-cli search-properties "occupation"
 wd-cli get-statements Q42
@@ -88,17 +88,17 @@ wd-cli execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
 Entity-first workflow:
 
 ```bash
-wd-cli resolve "Hartree" --limit 5
-wd-cli profile Q113465975 --type company
-wd-cli get-statement-values Q113465975 P17
+wd-cli resolve "Marie Curie" --limit 5
+wd-cli profile Q7186 --type person
+wd-cli get-statement-values Q7186 P27
 ```
 
 JSON mode:
 
 ```bash
 wd-cli --json search-items "Douglas Adams"
-wd-cli --json resolve "Hartree"
-wd-cli --json profile Q113465975 --type company
+wd-cli --json resolve "Marie Curie"
+wd-cli --json profile Q7186 --type person
 ```
 
 Equivalent one-shot usage with no install:

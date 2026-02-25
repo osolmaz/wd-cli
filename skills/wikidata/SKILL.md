@@ -60,8 +60,8 @@ Useful aliases:
 Resolve then profile (recommended default flow):
 
 ```bash
-wd-cli resolve "Hartree" --limit 5
-wd-cli profile Q113465975 --type company
+wd-cli resolve "Marie Curie" --limit 5
+wd-cli profile Q7186 --type person
 ```
 
 Search entities:
@@ -91,8 +91,8 @@ Machine-readable output:
 
 ```bash
 wd-cli --json search-items "Douglas Adams"
-wd-cli --json resolve "Hartree"
-wd-cli --json profile Q113465975 --type company
+wd-cli --json resolve "Marie Curie"
+wd-cli --json profile Q7186 --type person
 wd-cli --json sparql --query 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'
 ```
 
