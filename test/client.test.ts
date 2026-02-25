@@ -184,3 +184,108 @@ test("client timeout uses configured value", () => {
   const client = new Client(cfg);
   assert.equal(client.timeout(), 7000);
 });
+
+test("getProfile returns normalized company fields", async () => {
+  let gotPIDParam = "";
+  let gotLang = "";
+
+  await withServer(
+    (req, res) => {
+      const parsed = new URL(req.url || "/", "http://127.0.0.1");
+      if (parsed.pathname !== "/textify") {
+        res.statusCode = 404;
+        res.end("not found");
+        return;
+      }
+
+      gotPIDParam = parsed.searchParams.get("pid") || "";
+      gotLang = parsed.searchParams.get("lang") || "";
+
+      res.setHeader("Content-Type", "application/json");
+      res.end(
+        JSON.stringify({
+          Q113465975: {
+            QID: "Q113465975",
+            label: "Hartree",
+            description: "commodity trading company",
+            claims: [
+              {
+                PID: "P31",
+                property_label: "instance of",
+                datatype: "wikibase-item",
+                values: [
+                  {
+                    value: {
+                      QID: "Q4830453",
+                      label: "business",
+                    },
+                    rank: "normal",
+                    references: [
+                      [
+                        {
+                          PID: "P854",
+                          property_label: "reference URL",
+                          datatype: "url",
+                          values: [{ value: "https://example.test" }],
+                        },
+                      ],
+                    ],
+                  },
+                ],
+              },
+              {
+                PID: "P17",
+                property_label: "country",
+                datatype: "wikibase-item",
+                values: [
+                  {
+                    value: {
+                      QID: "Q334",
+                      label: "Singapore",
+                    },
+                    rank: "normal",
+                    references: [],
+                  },
+                ],
+              },
+              {
+                PID: "P856",
+                property_label: "official website",
+                datatype: "url",
+                values: [
+                  {
+                    value: "https://www.hartreepartners.com",
+                    rank: "normal",
+                    references: [],
+                  },
+                ],
+              },
+            ],
+          },
+        }),
+      );
+    },
+    async (baseURL) => {
+      const client = new Client(testConfig(baseURL));
+      const profile = await client.getProfile("Q113465975", "company", "en");
+
+      assert.match(gotPIDParam, /P31/);
+      assert.match(gotPIDParam, /P17/);
+      assert.match(gotPIDParam, /P856/);
+      assert.equal(gotLang, "en");
+
+      assert.equal(profile.entity_id, "Q113465975");
+      assert.equal(profile.profile_type, "company");
+      assert.equal(profile.label, "Hartree");
+      assert.equal(profile.description, "commodity trading company");
+      assert.equal(profile.fields.instance_of.values[0].display, "business");
+      assert.equal(profile.fields.instance_of.values[0].reference_count, 1);
+      assert.equal(profile.fields.country.values[0].entity_id, "Q334");
+      assert.equal(
+        profile.fields.official_website.values[0].display,
+        "https://www.hartreepartners.com",
+      );
+      assert.equal(profile.sources.provider, `${baseURL}/textify`);
+    },
+  );
+});

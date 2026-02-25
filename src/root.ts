@@ -3,10 +3,13 @@ import { Command, CommanderError } from "commander";
 import { Client } from "./client.js";
 import { defaultConfig, formatDuration, parseDuration } from "./config.js";
 import { printJSON, printText } from "./output.js";
+import { runProfileCommand } from "./profile-command.js";
+import { runResolveCommand } from "./resolve-command.js";
 import { ensureClient, newRootOptions, rootOptionsToConfig } from "./root-options.js";
 import type { RootOptions } from "./root-options.js";
 import { runSearchCommand } from "./search-command.js";
 import { resolveSPARQLQuery } from "./sparql-command.js";
+import type { ProfileType } from "./types.js";
 import { runVersionCommand } from "./version-command.js";
 
 interface RootFlagValues {
@@ -46,6 +49,18 @@ interface SPARQLCommandOptions {
   k: number;
 }
 
+interface ProfileCommandOptions {
+  type: string;
+  lang: string;
+}
+
+type SearchLikeHandler = (
+  query: string,
+  lang: string,
+  limit: number,
+  noVector: boolean,
+) => Promise<void>;
+
 export async function execute(args: string[]): Promise<void> {
   const program = newRootCommand();
   try {
@@ -70,7 +85,7 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .description("Explore and query Wikidata from your terminal")
     .addHelpText(
       "after",
-      "\nExamples:\n  wd-cli search-items \"Douglas Adams\"\n  wd-cli get-statements Q42\n  wd-cli --json execute-sparql 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'",
+      "\nExamples:\n  wd-cli resolve \"Hartree\"\n  wd-cli profile Q113465975 --type company\n  wd-cli search-items \"Douglas Adams\"\n  wd-cli get-statements Q42\n  wd-cli --json execute-sparql 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'",
     )
     .showSuggestionAfterError()
     .exitOverride();
@@ -128,19 +143,13 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     opts.client = opts.createClient ? opts.createClient(config) : new Client(config);
   });
 
-  const searchItemsCommand = new Command("search-items")
-    .alias("si")
-    .description("Search Wikidata items (QIDs)")
-    .argument("<query>")
-    .option("--lang <lang>", "Language code for labels/descriptions", "en")
-    .option("--limit <limit>", "Maximum search results", parseIntOption, 10)
-    .option("--no-vector", "Disable vector search and use keyword search only", false)
-    .action(async (query: string, options: SearchCommandOptions) => {
+  const searchItemsCommand = newSearchLikeCommand(
+    "search-items",
+    "Search Wikidata items (QIDs)",
+    "Maximum search results",
+    10,
+    async (query, lang, limit, noVector) => {
       const client = ensureClient(opts);
-      const lang = options.lang;
-      const limit = options.limit;
-      const noVector = !options.vector;
-
       await runSearchCommand(
         opts,
         query,
@@ -151,21 +160,17 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
         (searchQuery, searchLang, searchLimit, disableVector) =>
           client.searchItems(searchQuery, searchLang, searchLimit, disableVector),
       );
-    });
+    },
+    "si",
+  );
 
-  const searchPropertiesCommand = new Command("search-properties")
-    .alias("sp")
-    .description("Search Wikidata properties (PIDs)")
-    .argument("<query>")
-    .option("--lang <lang>", "Language code for labels/descriptions", "en")
-    .option("--limit <limit>", "Maximum search results", parseIntOption, 10)
-    .option("--no-vector", "Disable vector search and use keyword search only", false)
-    .action(async (query: string, options: SearchCommandOptions) => {
+  const searchPropertiesCommand = newSearchLikeCommand(
+    "search-properties",
+    "Search Wikidata properties (PIDs)",
+    "Maximum search results",
+    10,
+    async (query, lang, limit, noVector) => {
       const client = ensureClient(opts);
-      const lang = options.lang;
-      const limit = options.limit;
-      const noVector = !options.vector;
-
       await runSearchCommand(
         opts,
         query,
@@ -175,6 +180,42 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
         "property",
         (searchQuery, searchLang, searchLimit, disableVector) =>
           client.searchProperties(searchQuery, searchLang, searchLimit, disableVector),
+      );
+    },
+    "sp",
+  );
+
+  const resolveCommand = newSearchLikeCommand(
+    "resolve",
+    "Resolve free-text names to likely Wikidata item IDs",
+    "Maximum candidates to return",
+    5,
+    async (query, lang, limit, noVector) => {
+      const client = ensureClient(opts);
+      await runResolveCommand(
+        opts,
+        query,
+        lang,
+        limit,
+        noVector,
+        (searchQuery, searchLang, searchLimit, disableVector) =>
+          client.searchItems(searchQuery, searchLang, searchLimit, disableVector),
+      );
+    },
+  );
+
+  const profileCommand = new Command("profile")
+    .description("Return a curated profile for a company, person, or place")
+    .argument("<entity-id>")
+    .option("--type <type>", "Profile type: company|person|place", "company")
+    .option("--lang <lang>", "Language code for labels/descriptions", "en")
+    .action(async (entityID: string, options: ProfileCommandOptions) => {
+      const client = ensureClient(opts);
+      const profileType = parseProfileType(options.type);
+      const lang = options.lang;
+
+      await runProfileCommand(opts, entityID, profileType, lang, (id, type, langCode) =>
+        client.getProfile(id, type, langCode),
       );
     });
 
@@ -314,6 +355,8 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
 
   program.addCommand(searchItemsCommand);
   program.addCommand(searchPropertiesCommand);
+  program.addCommand(resolveCommand);
+  program.addCommand(profileCommand);
   program.addCommand(getStatementsCommand);
   program.addCommand(getStatementValuesCommand);
   program.addCommand(getHierarchyCommand);
@@ -323,10 +366,52 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
   return program;
 }
 
+function newSearchLikeCommand(
+  name: string,
+  description: string,
+  limitDescription: string,
+  defaultLimit: number,
+  handler: SearchLikeHandler,
+  alias = "",
+): Command {
+  const command = new Command(name)
+    .description(description)
+    .argument("<query>")
+    .option("--lang <lang>", "Language code for labels/descriptions", "en")
+    .option("--limit <limit>", limitDescription, parseIntOption, defaultLimit)
+    .option("--no-vector", "Disable vector search and use keyword search only", false)
+    .action(async (query: string, options: SearchCommandOptions) => {
+      const lang = options.lang;
+      const limit = options.limit;
+      const noVector = !options.vector;
+      await handler(query, lang, limit, noVector);
+    });
+
+  if (alias.trim() !== "") {
+    command.alias(alias);
+  }
+
+  return command;
+}
+
 function parseIntOption(value: string): number {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed)) {
     throw new Error(`invalid integer value: ${value}`);
   }
   return parsed;
+}
+
+function parseProfileType(value: string): ProfileType {
+  const profileType = value.trim().toLowerCase();
+  switch (profileType) {
+    case "company":
+    case "person":
+    case "place":
+      return profileType;
+    default:
+      throw new Error(
+        `invalid profile type: ${value} (expected one of: company, person, place)`,
+      );
+  }
 }

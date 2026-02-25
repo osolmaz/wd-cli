@@ -54,6 +54,8 @@ wd-cli --json search-items "Douglas Adams"
 
 - `search-items <query>`
 - `search-properties <query>`
+- `resolve <query>`
+- `profile <entity-id>`
 - `get-statements <entity-id>`
 - `get-statement-values <entity-id> <property-id>`
 - `get-instance-and-subclass-hierarchy <entity-id>`
@@ -62,6 +64,8 @@ wd-cli --json search-items "Douglas Adams"
 ## Common command examples
 
 ```bash
+wd-cli resolve "Hartree"
+wd-cli profile Q113465975 --type company
 wd-cli search-items "Douglas Adams"
 wd-cli search-properties "occupation"
 wd-cli get-statements Q42

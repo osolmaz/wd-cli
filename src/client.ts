@@ -1,9 +1,17 @@
 import type { Config } from "./config.js";
 import { firstNonEmpty } from "./config.js";
 import { tripletValuesToString } from "./format.js";
+import {
+  emptyProfileFields,
+  profileFieldDefinitions,
+  profileFieldsFromEntity,
+  profilePropertyIDs,
+} from "./profile.js";
 import type {
   ApiLangValue,
   HierarchyResult,
+  ProfileResult,
+  ProfileType,
   SearchResponse,
   SearchResult,
   SPARQLResult,
@@ -508,6 +516,57 @@ export class Client {
       tree: {
         result: rendered,
       },
+    };
+  }
+
+  async getProfile(
+    entityID: string,
+    profileType: ProfileType,
+    lang: string,
+  ): Promise<ProfileResult> {
+    const cleanEntityID = entityID.trim();
+    if (cleanEntityID === "") {
+      throw new Error("entity ID cannot be empty");
+    }
+
+    const cleanLang = lang.trim() === "" ? "en" : lang.trim();
+    const definitions = profileFieldDefinitions(profileType);
+    const propertyIDs = profilePropertyIDs(definitions);
+    const baseResult: Omit<ProfileResult, "message"> = {
+      entity_id: cleanEntityID,
+      profile_type: profileType,
+      lang: cleanLang,
+      fetched_at: new Date().toISOString(),
+      label: "",
+      description: "",
+      fields: emptyProfileFields(definitions),
+      sources: {
+        provider: this.cfg.textifierUrl,
+        property_ids: propertyIDs,
+      },
+    };
+
+    const response = await this.getTripletValues([cleanEntityID], propertyIDs, {
+      externalIDs: true,
+      allRanks: false,
+      references: true,
+      qualifiers: true,
+      lang: cleanLang,
+    });
+
+    const entity = response[cleanEntityID];
+    if (!entity) {
+      return {
+        ...baseResult,
+        message: `Entity ${cleanEntityID} not found`,
+      };
+    }
+
+    return {
+      ...baseResult,
+      label: (entity.label || "").trim(),
+      description: (entity.description || "").trim(),
+      fields: profileFieldsFromEntity(entity, definitions),
     };
   }
 

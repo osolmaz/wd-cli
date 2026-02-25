@@ -9,6 +9,8 @@
 `wd-cli` is a TypeScript command-line client for exploring and querying Wikidata.
 
 - Search items and properties
+- Resolve names to likely entities
+- Build curated profiles for company/person/place
 - Inspect statements and statement values
 - Traverse instance/subclass hierarchies
 - Execute SPARQL queries
@@ -67,6 +69,8 @@ node dist/cli.js --help
 ## Usage Examples
 
 ```bash
+wd-cli resolve "Hartree"
+wd-cli profile Q113465975 --type company
 wd-cli search-items "Douglas Adams"
 wd-cli search-properties "occupation"
 wd-cli get-statements Q42
@@ -91,6 +95,8 @@ npx -y @osolmaz/wd-cli --json search-items "Douglas Adams"
 
 - `search-items <query>`
 - `search-properties <query>`
+- `resolve <query>`
+- `profile <entity-id>`
 - `get-statements <entity-id>`
 - `get-statement-values <entity-id> <property-id>`
 - `get-instance-and-subclass-hierarchy <entity-id>`
