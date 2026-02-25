@@ -6,7 +6,7 @@ date: 2026-02-24
 
 ## Scope
 
-Build a production-leaning Go CLI named `wikidata-cli` with full parity for the current Wikimedia Wikidata MCP toolset:
+Build a production-leaning Go CLI named `wd-cli` with full parity for the current Wikimedia Wikidata MCP toolset:
 
 1. `search_items`
 2. `search_properties`
@@ -24,7 +24,7 @@ Build a production-leaning Go CLI named `wikidata-cli` with full parity for the 
 
 ## Command Design
 
-- Binary name: `wikidata-cli`
+- Binary name: `wd-cli`
 - Primary commands (MCP parity):
   - `search-items`
   - `search-properties`
@@ -39,10 +39,10 @@ Build a production-leaning Go CLI named `wikidata-cli` with full parity for the 
 
 ## Architecture
 
-- `cmd/wikidata-cli/`: executable entrypoint
+- `cmd/wd-cli/`: executable entrypoint
 - `internal/cmd/`: Cobra command definitions and output handling
 - `internal/wikidata/`: typed API client + formatters and transformation logic
-- `docs/wikidata-cli/`: operational and planning documentation
+- `docs/wd-cli/`: operational and planning documentation
 
 ## API/Config Compatibility
 
@@ -76,6 +76,6 @@ Build a production-leaning Go CLI named `wikidata-cli` with full parity for the 
 - `go mod tidy`
 - `go fmt ./...`
 - `go test ./...`
-- `go build ./cmd/wikidata-cli`
+- `go build ./cmd/wd-cli`
 - Live smoke tests for all six MCP-equivalent commands
 

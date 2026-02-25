@@ -1,6 +1,6 @@
-# wikidata-cli
+# wd-cli
 
-`wikidata-cli` is a native TypeScript CLI for exploring and querying Wikidata.
+`wd-cli` is a native TypeScript CLI for exploring and querying Wikidata.
 
 ## Features
 
@@ -55,9 +55,9 @@ node dist/cli.js --json search-items "Douglas Adams"
 - `WD_VECTORDB_API_SECRET` (optional)
 - `USER_AGENT` (recommended to set a descriptive value)
 - `REQUEST_TIMEOUT_SECONDS` (default `15`)
-- `WIKIDATA_CLI_VERSION` (optional version override for `version` command)
-- `WIKIDATA_CLI_COMMIT` (optional commit override for `version` command)
-- `WIKIDATA_CLI_DATE` (optional date override for `version` command)
+- `WD_CLI_VERSION` (optional version override for `version` command)
+- `WD_CLI_COMMIT` (optional commit override for `version` command)
+- `WD_CLI_DATE` (optional date override for `version` command)
 
 ## Operational docs
 

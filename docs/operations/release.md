@@ -4,16 +4,16 @@
 
 `version` command metadata is sourced from environment variables at runtime:
 
-- `WIKIDATA_CLI_VERSION`
-- `WIKIDATA_CLI_COMMIT`
-- `WIKIDATA_CLI_DATE`
+- `WD_CLI_VERSION`
+- `WD_CLI_COMMIT`
+- `WD_CLI_DATE`
 
 ## Local release build
 
 ```bash
 npm ci
 npm run build
-WIKIDATA_CLI_VERSION=v1.2.3 WIKIDATA_CLI_COMMIT=abc1234 WIKIDATA_CLI_DATE=2026-02-25T12:00:00Z node dist/cli.js version
+WD_CLI_VERSION=v1.2.3 WD_CLI_COMMIT=abc1234 WD_CLI_DATE=2026-02-25T12:00:00Z node dist/cli.js version
 ```
 
 ## Pre-release checks

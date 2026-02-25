@@ -41,7 +41,7 @@ function testConfig(baseURL: string): Config {
     wikidataQueryUrl: `${baseURL}/sparql`,
     textifierUrl: `${baseURL}/textify`,
     vectorSearchUrl: `${baseURL}/vector`,
-    userAgent: "wikidata-cli-test/1.0",
+    userAgent: "wd-cli-test/1.0",
     timeoutMs: 2000,
     vectorApiSecret: "",
   };
@@ -126,7 +126,7 @@ test("getJSON sends headers and query params", async () => {
       assert.match(gotQuery, /query=Douglas\+Adams/);
       assert.match(gotQuery, /lang=en/);
       assert.equal(gotAccept, "application/json");
-      assert.equal(gotUA, "wikidata-cli-test/1.0");
+      assert.equal(gotUA, "wd-cli-test/1.0");
       assert.equal(gotCustom, "enabled");
       assert.equal(response.status, "ok");
     },

@@ -40,11 +40,11 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
 
   const program = new Command();
   program
-    .name("wikidata-cli")
+    .name("wd-cli")
     .description("Explore and query Wikidata from your terminal")
     .addHelpText(
       "after",
-      "\nExamples:\n  wikidata-cli search-items \"Douglas Adams\"\n  wikidata-cli get-statements Q42\n  wikidata-cli --json execute-sparql 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'",
+      "\nExamples:\n  wd-cli search-items \"Douglas Adams\"\n  wd-cli get-statements Q42\n  wd-cli --json execute-sparql 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'",
     )
     .showSuggestionAfterError()
     .exitOverride();

@@ -22,7 +22,7 @@ test("resolveSPARQLQuery from flag", async () => {
 });
 
 test("resolveSPARQLQuery from file", async () => {
-  const dir = await mkdtemp(join(tmpdir(), "wikidata-cli-test-"));
+  const dir = await mkdtemp(join(tmpdir(), "wd-cli-test-"));
   const path = join(dir, "query.sparql");
   await writeFile(path, "  SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2  ");
 
@@ -42,7 +42,7 @@ test("resolveSPARQLQuery rejects missing source", async () => {
 });
 
 test("resolveSPARQLQuery rejects empty query", async () => {
-  const dir = await mkdtemp(join(tmpdir(), "wikidata-cli-test-"));
+  const dir = await mkdtemp(join(tmpdir(), "wd-cli-test-"));
   const path = join(dir, "query.sparql");
   await writeFile(path, "   ");
 

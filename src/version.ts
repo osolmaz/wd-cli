@@ -1,7 +1,7 @@
 export const buildMetadata = {
-  version: (process.env.WIKIDATA_CLI_VERSION || "0.1.0-dev").trim(),
-  commit: (process.env.WIKIDATA_CLI_COMMIT || "").trim(),
-  date: (process.env.WIKIDATA_CLI_DATE || "").trim(),
+  version: (process.env.WD_CLI_VERSION || "0.1.0-dev").trim(),
+  commit: (process.env.WD_CLI_COMMIT || "").trim(),
+  date: (process.env.WD_CLI_DATE || "").trim(),
 };
 
 export function getVersionPayload(): {
