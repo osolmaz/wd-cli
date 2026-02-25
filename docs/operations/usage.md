@@ -1,6 +1,21 @@
 # Usage Guide
 
-## Build and run
+## Run options
+
+### No install (npx)
+
+```bash
+npx -y @osolmaz/wd-cli --help
+```
+
+### Global install
+
+```bash
+npm install -g @osolmaz/wd-cli
+wd-cli --help
+```
+
+### Build and run from source
 
 ```bash
 npm ci
@@ -22,7 +37,7 @@ npm run dev -- --help
 Example:
 
 ```bash
-node dist/cli.js --json search-items "Douglas Adams"
+wd-cli --json search-items "Douglas Adams"
 ```
 
 ## Commands
@@ -37,16 +52,22 @@ node dist/cli.js --json search-items "Douglas Adams"
 ## Common command examples
 
 ```bash
-node dist/cli.js search-items "Douglas Adams"
-node dist/cli.js search-properties "occupation"
-node dist/cli.js get-statements Q42
-node dist/cli.js get-statement-values Q42 P106
-node dist/cli.js get-instance-and-subclass-hierarchy Q42 --max-depth 2
-node dist/cli.js execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
+wd-cli search-items "Douglas Adams"
+wd-cli search-properties "occupation"
+wd-cli get-statements Q42
+wd-cli get-statement-values Q42 P106
+wd-cli get-instance-and-subclass-hierarchy Q42 --max-depth 2
+wd-cli execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
 ```
 
 Use a query file for SPARQL:
 
 ```bash
-node dist/cli.js execute-sparql --file ./query.sparql
+wd-cli execute-sparql --file ./query.sparql
+```
+
+No-install equivalent example:
+
+```bash
+npx -y @osolmaz/wd-cli execute-sparql --file ./query.sparql
 ```

@@ -1,5 +1,10 @@
 # Release Guide
 
+## Package identity
+
+- npm package: `@osolmaz/wd-cli`
+- executable binary: `wd-cli`
+
 ## Build metadata
 
 `version` command metadata is sourced from environment variables at runtime:
@@ -26,10 +31,17 @@ npm run build
 npm test
 ```
 
+## Verify package visibility
+
+```bash
+npm view @osolmaz/wd-cli version
+npx -y @osolmaz/wd-cli --help
+```
+
 ## Suggested release workflow
 
 1. Ensure `main` is up to date and clean.
 2. Run pre-release checks.
 3. Build and verify metadata with `node dist/cli.js version`.
-4. Create and push a git tag.
-5. Publish release artifacts from the tagged commit.
+4. Run the GitHub `Release` workflow.
+5. Verify npm resolution with `npm view @osolmaz/wd-cli version`.

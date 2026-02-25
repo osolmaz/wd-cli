@@ -1,5 +1,5 @@
 {
-  "name": "wd-cli",
+  "name": "@osolmaz/wd-cli",
   "version": "0.1.0",
   "description": "Native TypeScript CLI for exploring and querying Wikidata",
   "type": "module",
@@ -37,6 +37,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/osolmaz/wd-cli.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=18"

@@ -1,23 +1,68 @@
 # wd-cli
 
-`wd-cli` is a native TypeScript CLI for exploring and querying Wikidata.
+[![npm version](https://img.shields.io/npm/v/%40osolmaz%2Fwd-cli.svg)](https://www.npmjs.com/package/@osolmaz/wd-cli)
+[![npm downloads](https://img.shields.io/npm/dm/%40osolmaz%2Fwd-cli.svg)](https://www.npmjs.com/package/@osolmaz/wd-cli)
+[![CI](https://github.com/osolmaz/wd-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/osolmaz/wd-cli/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/node/v/%40osolmaz%2Fwd-cli.svg)](https://nodejs.org)
 
-## Features
+`wd-cli` is a TypeScript command-line client for exploring and querying Wikidata.
 
-- Native CLI commands for item/property search, statement lookup, statement value extraction, hierarchy traversal, and SPARQL execution
-- Human-friendly text output by default
-- Script-friendly JSON output via `--json`
-- Configurable endpoints, timeout, and `User-Agent`
-- Vector-first search with keyword fallback
+- Search items and properties
+- Inspect statements and statement values
+- Traverse instance/subclass hierarchies
+- Execute SPARQL queries
+- Use plain-text output by default or `--json` for automation
 
 Parity note: command coverage tracks the original Wikidata MCP implementations as a reference baseline: [zzaebok/mcp-wikidata](https://github.com/zzaebok/mcp-wikidata) and [philippesaade-wmde/WikidataMCP](https://github.com/philippesaade-wmde/WikidataMCP).
 
-## Install / Build
+## Quick Start
+
+### Run without installing (npx)
 
 ```bash
+npx -y @osolmaz/wd-cli --help
+npx -y @osolmaz/wd-cli search-items "Douglas Adams"
+```
+
+### Install globally with npm
+
+```bash
+npm install -g @osolmaz/wd-cli
+wd-cli --help
+```
+
+### Build from source
+
+```bash
+git clone https://github.com/osolmaz/wd-cli.git
+cd wd-cli
 npm ci
 npm run build
 node dist/cli.js --help
+```
+
+## Usage Examples
+
+```bash
+wd-cli search-items "Douglas Adams"
+wd-cli search-properties "occupation"
+wd-cli get-statements Q42
+wd-cli get-statement-values Q42 P106
+wd-cli get-instance-and-subclass-hierarchy Q42 --max-depth 2
+wd-cli execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
+```
+
+JSON mode:
+
+```bash
+wd-cli --json search-items "Douglas Adams"
+```
+
+Equivalent one-shot usage with no install:
+
+```bash
+npx -y @osolmaz/wd-cli --json search-items "Douglas Adams"
 ```
 
 ## Commands
@@ -28,23 +73,6 @@ node dist/cli.js --help
 - `get-statement-values <entity-id> <property-id>`
 - `get-instance-and-subclass-hierarchy <entity-id>`
 - `execute-sparql <query>`
-
-## Examples
-
-```bash
-node dist/cli.js search-items "Douglas Adams"
-node dist/cli.js search-properties "occupation"
-node dist/cli.js get-statements Q42
-node dist/cli.js get-statement-values Q42 P106
-node dist/cli.js get-instance-and-subclass-hierarchy Q42 --max-depth 2
-node dist/cli.js execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
-```
-
-JSON mode:
-
-```bash
-node dist/cli.js --json search-items "Douglas Adams"
-```
 
 ## Environment Variables
 
@@ -65,3 +93,7 @@ node dist/cli.js --json search-items "Douglas Adams"
 - [Configuration guide](docs/operations/configuration.md)
 - [Troubleshooting guide](docs/operations/troubleshooting.md)
 - [Release guide](docs/operations/release.md)
+
+## License
+
+MIT

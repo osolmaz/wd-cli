@@ -35,7 +35,7 @@ jobs:
       - run: npm run typecheck
       - name: Bump version from npm registry
         run: |
-          LATEST=$(npm view wikidata-cli version 2>/dev/null || echo "0.0.0")
+          LATEST=$(npm view @osolmaz/wd-cli version 2>/dev/null || echo "0.0.0")
           echo "Latest on npm: $LATEST"
           npm version --no-git-tag-version "$LATEST" --allow-same-version
           npm version --no-git-tag-version ${{ inputs.increment }}
