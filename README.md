@@ -74,34 +74,6 @@ A practical default flow is:
 - `execute-sparql [query]`
   Run custom SPARQL against Wikidata Query Service for advanced filters and graph patterns.
 
-## Agent Skill (skillflag)
-
-`wd-cli` bundles a `wikidata` agent skill under `skills/wikidata`.
-
-The skill includes an entity-first workflow for common tasks:
-
-- resolve ambiguous names to candidate QIDs
-- build concise `company`/`person`/`place` profiles
-- drill into statements, hierarchy, or SPARQL only when needed
-
-List bundled skills:
-
-```bash
-wd-cli --skill list
-```
-
-Inspect the skill:
-
-```bash
-wd-cli --skill show wikidata
-```
-
-Install it into your coding agent (example: Codex repo scope):
-
-```bash
-wd-cli --skill export wikidata | npx skillflag install --agent codex --scope repo
-```
-
 ## Usage Examples
 
 General examples:
@@ -137,6 +109,34 @@ Equivalent one-shot usage with no install:
 
 ```bash
 npx -y @osolmaz/wd-cli --json search-items "Douglas Adams"
+```
+
+## Agent Skill (skillflag)
+
+`wd-cli` bundles a `wikidata` agent skill under `skills/wikidata`.
+
+The skill includes an entity-first workflow for common tasks:
+
+- resolve ambiguous names to candidate QIDs
+- build concise `company`/`person`/`place` profiles
+- drill into statements, hierarchy, or SPARQL only when needed
+
+List bundled skills:
+
+```bash
+wd-cli --skill list
+```
+
+Inspect the skill:
+
+```bash
+wd-cli --skill show wikidata
+```
+
+Install it into your coding agent (example: Codex repo scope):
+
+```bash
+wd-cli --skill export wikidata | npx skillflag install --agent codex --scope repo
 ```
 
 ## Environment Variables
