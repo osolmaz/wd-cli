@@ -1,5 +1,7 @@
-bin/
-.tools/
+node_modules/
 dist/
+dist-test/
+*.tgz
+coverage/
 coverage.out
-
+bin/

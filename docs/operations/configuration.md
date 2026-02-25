@@ -28,6 +28,9 @@ Flags are defined at the root command and apply to all subcommands.
 - `WD_VECTORDB_API_SECRET` (optional)
 - `USER_AGENT` (recommended)
 - `REQUEST_TIMEOUT_SECONDS` (supports integer or float seconds, must be `> 0`)
+- `WIKIDATA_CLI_VERSION` (optional)
+- `WIKIDATA_CLI_COMMIT` (optional)
+- `WIKIDATA_CLI_DATE` (optional)
 
 ## Recommended settings
 

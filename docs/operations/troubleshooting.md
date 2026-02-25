@@ -6,7 +6,7 @@ This indicates command execution is bypassing normal root command setup.
 
 Actions:
 
-- Run commands through the CLI entrypoint (`wikidata-cli <command> ...`).
+- Run commands through the CLI entrypoint (`node dist/cli.js <command> ...`).
 - Avoid calling command handlers directly without root command initialization.
 
 ## HTTP errors from remote services
@@ -47,7 +47,7 @@ Actions:
 
 Symptoms:
 
-- `request failed: context deadline exceeded`
+- `request failed: ...`
 
 Actions:
 
