@@ -29,6 +29,16 @@ For local development:
 npm run dev -- --help
 ```
 
+## Bundled skill export
+
+`wd-cli` supports `skillflag` and ships a bundled `wikidata` skill.
+
+```bash
+wd-cli --skill list
+wd-cli --skill show wikidata
+wd-cli --skill export wikidata | npx skillflag install --agent codex --scope repo
+```
+
 ## Output modes
 
 - Default output is plain text.

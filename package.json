@@ -5,6 +5,7 @@
   "type": "module",
   "files": [
     "dist",
+    "skills",
     "README.md"
   ],
   "bin": {
@@ -45,7 +46,8 @@
     "node": ">=18"
   },
   "dependencies": {
-    "commander": "^13.1.0"
+    "commander": "^13.1.0",
+    "skillflag": "^0.1.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",

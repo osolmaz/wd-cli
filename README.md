@@ -32,6 +32,28 @@ npm install -g @osolmaz/wd-cli
 wd-cli --help
 ```
 
+## Agent Skill (skillflag)
+
+`wd-cli` bundles a `wikidata` agent skill under `skills/wikidata`.
+
+List bundled skills:
+
+```bash
+wd-cli --skill list
+```
+
+Inspect the skill:
+
+```bash
+wd-cli --skill show wikidata
+```
+
+Install it into your coding agent (example: Codex repo scope):
+
+```bash
+wd-cli --skill export wikidata | npx skillflag install --agent codex --scope repo
+```
+
 ### Build from source
 
 ```bash
