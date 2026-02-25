@@ -67,9 +67,7 @@ function profileToText(result: ProfileResult): string {
       }
 
       const entityID =
-        value.entity_id && display !== value.entity_id
-          ? ` [${value.entity_id}]`
-          : "";
+        value.entity_id && display !== value.entity_id ? ` [${value.entity_id}]` : "";
       const refs = value.reference_count > 0 ? ` (refs: ${value.reference_count})` : "";
       lines.push(`- ${display}${entityID}${refs}`);
     }

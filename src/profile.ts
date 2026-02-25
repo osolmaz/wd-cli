@@ -60,7 +60,9 @@ const PROFILE_FIELDS: Record<ProfileType, ProfileFieldDefinition[]> = {
   ],
 };
 
-export function profileFieldDefinitions(profileType: ProfileType): ProfileFieldDefinition[] {
+export function profileFieldDefinitions(
+  profileType: ProfileType,
+): ProfileFieldDefinition[] {
   const definitions = PROFILE_FIELDS[profileType];
   if (!definitions) {
     throw new Error(`unsupported profile type: ${profileType}`);

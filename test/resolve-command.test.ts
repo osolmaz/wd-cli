@@ -42,7 +42,10 @@ test("runResolveCommand formats disambiguation output", async () => {
   const got = out.output();
   assert.match(got, /1\. Q113465975: Hartree — commodity trading company/);
   assert.match(got, /\[high confidence; exact label match, top search result\]/);
-  assert.match(got, /2\. Q123: Hartree Partners \[medium confidence; strong label overlap\]/);
+  assert.match(
+    got,
+    /2\. Q123: Hartree Partners \[medium confidence; strong label overlap\]/,
+  );
 });
 
 test("runResolveCommand prints empty-state message", async () => {

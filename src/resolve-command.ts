@@ -52,8 +52,7 @@ export async function runResolveCommand(
 
   const lines = response.candidates.map((candidate) => {
     const confidence = `${candidate.confidence} confidence`;
-    const hints =
-      candidate.hints.length > 0 ? `; ${candidate.hints.join(", ")}` : "";
+    const hints = candidate.hints.length > 0 ? `; ${candidate.hints.join(", ")}` : "";
     return `${candidate.rank}. ${renderCandidate(candidate)} [${confidence}${hints}]`;
   });
 
