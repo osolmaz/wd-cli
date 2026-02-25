@@ -3,7 +3,7 @@ const DEFAULT_WIKIDATA_QUERY_URL = "https://query.wikidata.org/sparql";
 const DEFAULT_TEXTIFIER_URL = "https://wd-textify.wmcloud.org";
 const DEFAULT_VECTOR_SEARCH_URL = "https://wd-vectordb.wmcloud.org";
 const DEFAULT_TIMEOUT_MS = 15_000;
-const DEFAULT_USER_AGENT = "wd-cli/0.1 (+https://github.com/bob/wd-cli)";
+const DEFAULT_USER_AGENT = "wd-cli/0.1 (+https://github.com/osolmaz/wd-cli)";
 
 export interface Config {
   wikidataApiUrl: string;

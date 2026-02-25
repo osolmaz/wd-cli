@@ -78,4 +78,3 @@ Build a production-leaning Go CLI named `wd-cli` with full parity for the curren
 - `go test ./...`
 - `go build ./cmd/wd-cli`
 - Live smoke tests for all six MCP-equivalent commands
-

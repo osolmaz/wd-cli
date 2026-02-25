@@ -32,11 +32,11 @@
     "knowledge-graph",
     "sparql"
   ],
-  "author": "",
+  "author": "Onur Solmaz <info@solmaz.io>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bob/wd-cli.git"
+    "url": "git+https://github.com/osolmaz/wd-cli.git"
   },
   "engines": {
     "node": ">=18"
