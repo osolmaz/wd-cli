@@ -20,6 +20,32 @@ interface RootFlagValues {
   vectorApiSecret: string;
 }
 
+interface SearchCommandOptions {
+  lang: string;
+  limit: number;
+  vector: boolean;
+}
+
+interface StatementsCommandOptions {
+  includeExternalIds: boolean;
+  lang: string;
+}
+
+interface LangCommandOptions {
+  lang: string;
+}
+
+interface HierarchyCommandOptions {
+  maxDepth: number;
+  lang: string;
+}
+
+interface SPARQLCommandOptions {
+  query: string;
+  file: string;
+  k: number;
+}
+
 export async function execute(args: string[]): Promise<void> {
   const program = newRootCommand();
   try {
@@ -98,7 +124,8 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     opts.vectorSearchUrl = flags.vectorSearchUrl;
     opts.vectorSecret = flags.vectorApiSecret;
 
-    opts.client = new Client(rootOptionsToConfig(opts, defaults));
+    const config = rootOptionsToConfig(opts, defaults);
+    opts.client = opts.createClient ? opts.createClient(config) : new Client(config);
   });
 
   const searchItemsCommand = new Command("search-items")
@@ -108,11 +135,11 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .option("--lang <lang>", "Language code for labels/descriptions", "en")
     .option("--limit <limit>", "Maximum search results", parseIntOption, 10)
     .option("--no-vector", "Disable vector search and use keyword search only", false)
-    .action(async (query: string, command: Command) => {
+    .action(async (query: string, options: SearchCommandOptions) => {
       const client = ensureClient(opts);
-      const lang = command.getOptionValue("lang") as string;
-      const limit = command.getOptionValue("limit") as number;
-      const noVector = !(command.getOptionValue("vector") as boolean);
+      const lang = options.lang;
+      const limit = options.limit;
+      const noVector = !options.vector;
 
       await runSearchCommand(
         opts,
@@ -133,11 +160,11 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .option("--lang <lang>", "Language code for labels/descriptions", "en")
     .option("--limit <limit>", "Maximum search results", parseIntOption, 10)
     .option("--no-vector", "Disable vector search and use keyword search only", false)
-    .action(async (query: string, command: Command) => {
+    .action(async (query: string, options: SearchCommandOptions) => {
       const client = ensureClient(opts);
-      const lang = command.getOptionValue("lang") as string;
-      const limit = command.getOptionValue("limit") as number;
-      const noVector = !(command.getOptionValue("vector") as boolean);
+      const lang = options.lang;
+      const limit = options.limit;
+      const noVector = !options.vector;
 
       await runSearchCommand(
         opts,
@@ -157,10 +184,10 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .argument("<entity-id>")
     .option("--include-external-ids", "Include external identifier statements", false)
     .option("--lang <lang>", "Language code for labels/descriptions", "en")
-    .action(async (entityID: string, command: Command) => {
+    .action(async (entityID: string, options: StatementsCommandOptions) => {
       const client = ensureClient(opts);
-      const includeExternalIDs = Boolean(command.getOptionValue("includeExternalIds"));
-      const lang = command.getOptionValue("lang") as string;
+      const includeExternalIDs = Boolean(options.includeExternalIds);
+      const lang = options.lang;
       const result = await client.getStatements(entityID, includeExternalIDs, lang);
 
       if (opts.json) {
@@ -184,23 +211,25 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .argument("<entity-id>")
     .argument("<property-id>")
     .option("--lang <lang>", "Language code for labels/descriptions", "en")
-    .action(async (entityID: string, propertyID: string, command: Command) => {
-      const client = ensureClient(opts);
-      const lang = command.getOptionValue("lang") as string;
-      const result = await client.getStatementValues(entityID, propertyID, lang);
+    .action(
+      async (entityID: string, propertyID: string, options: LangCommandOptions) => {
+        const client = ensureClient(opts);
+        const lang = options.lang;
+        const result = await client.getStatementValues(entityID, propertyID, lang);
 
-      if (opts.json) {
-        printJSON(opts.stdout, {
-          entity_id: entityID,
-          property_id: propertyID,
-          lang,
-          result,
-        });
-        return;
-      }
+        if (opts.json) {
+          printJSON(opts.stdout, {
+            entity_id: entityID,
+            property_id: propertyID,
+            lang,
+            result,
+          });
+          return;
+        }
 
-      printText(opts.stdout, result);
-    });
+        printText(opts.stdout, result);
+      },
+    );
 
   const getHierarchyCommand = new Command("get-instance-and-subclass-hierarchy")
     .alias("hierarchy")
@@ -208,10 +237,10 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     .argument("<entity-id>")
     .option("--max-depth <depth>", "Maximum hierarchy depth", parseIntOption, 5)
     .option("--lang <lang>", "Language code for labels/descriptions", "en")
-    .action(async (entityID: string, command: Command) => {
+    .action(async (entityID: string, options: HierarchyCommandOptions) => {
       const client = ensureClient(opts);
-      const maxDepth = command.getOptionValue("maxDepth") as number;
-      const lang = command.getOptionValue("lang") as string;
+      const maxDepth = options.maxDepth;
+      const lang = options.lang;
       const result = await client.getInstanceAndSubclassHierarchy(
         entityID,
         maxDepth,
@@ -247,11 +276,11 @@ export function newRootCommand(opts: RootOptions = newRootOptions()): Command {
     )
     .option("--file <path>", "Path to file containing SPARQL query text", "")
     .option("--k <limit>", "Maximum rows to return", parseIntOption, 10)
-    .action(async (queryArg: string | undefined, command: Command) => {
+    .action(async (queryArg: string | undefined, options: SPARQLCommandOptions) => {
       const client = ensureClient(opts);
-      const queryFlag = command.getOptionValue("query") as string;
-      const queryFile = command.getOptionValue("file") as string;
-      const limit = command.getOptionValue("k") as number;
+      const queryFlag = options.query;
+      const queryFile = options.file;
+      const limit = options.k;
 
       const query = await resolveSPARQLQuery(
         queryArg ? [queryArg] : [],

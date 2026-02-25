@@ -13,6 +13,7 @@ export interface RootOptions {
   textifierUrl: string;
   vectorSearchUrl: string;
   vectorSecret: string;
+  createClient?: (config: Config) => Client;
   client?: Client;
   stdout: Writable;
 }
