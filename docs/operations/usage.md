@@ -3,16 +3,15 @@
 ## Build and run
 
 ```bash
-make tidy
-make build
-./bin/wikidata-cli --help
+npm ci
+npm run build
+node dist/cli.js --help
 ```
 
-For release-like binaries with embedded metadata:
+For local development:
 
 ```bash
-make release
-./bin/wikidata-cli version
+npm run dev -- --help
 ```
 
 ## Output modes
@@ -23,7 +22,7 @@ make release
 Example:
 
 ```bash
-wikidata-cli --json search-items "Douglas Adams"
+node dist/cli.js --json search-items "Douglas Adams"
 ```
 
 ## Commands
@@ -38,16 +37,16 @@ wikidata-cli --json search-items "Douglas Adams"
 ## Common command examples
 
 ```bash
-wikidata-cli search-items "Douglas Adams"
-wikidata-cli search-properties "occupation"
-wikidata-cli get-statements Q42
-wikidata-cli get-statement-values Q42 P106
-wikidata-cli get-instance-and-subclass-hierarchy Q42 --max-depth 2
-wikidata-cli execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
+node dist/cli.js search-items "Douglas Adams"
+node dist/cli.js search-properties "occupation"
+node dist/cli.js get-statements Q42
+node dist/cli.js get-statement-values Q42 P106
+node dist/cli.js get-instance-and-subclass-hierarchy Q42 --max-depth 2
+node dist/cli.js execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
 ```
 
 Use a query file for SPARQL:
 
 ```bash
-wikidata-cli execute-sparql --file ./query.sparql
+node dist/cli.js execute-sparql --file ./query.sparql
 ```

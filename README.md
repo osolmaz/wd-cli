@@ -1,6 +1,6 @@
 # wikidata-cli
 
-`wikidata-cli` is a native Go CLI for exploring and querying Wikidata.
+`wikidata-cli` is a native TypeScript CLI for exploring and querying Wikidata.
 
 ## Features
 
@@ -15,16 +15,9 @@ Parity note: command coverage tracks the original Wikidata MCP implementations a
 ## Install / Build
 
 ```bash
-make tidy
-make build
-./bin/wikidata-cli --help
-```
-
-Build with embedded `version/commit/date` metadata:
-
-```bash
-make release
-./bin/wikidata-cli version
+npm ci
+npm run build
+node dist/cli.js --help
 ```
 
 ## Commands
@@ -39,18 +32,18 @@ make release
 ## Examples
 
 ```bash
-wikidata-cli search-items "Douglas Adams"
-wikidata-cli search-properties "occupation"
-wikidata-cli get-statements Q42
-wikidata-cli get-statement-values Q42 P106
-wikidata-cli get-instance-and-subclass-hierarchy Q42 --max-depth 2
-wikidata-cli execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
+node dist/cli.js search-items "Douglas Adams"
+node dist/cli.js search-properties "occupation"
+node dist/cli.js get-statements Q42
+node dist/cli.js get-statement-values Q42 P106
+node dist/cli.js get-instance-and-subclass-hierarchy Q42 --max-depth 2
+node dist/cli.js execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
 ```
 
 JSON mode:
 
 ```bash
-wikidata-cli --json search-items "Douglas Adams"
+node dist/cli.js --json search-items "Douglas Adams"
 ```
 
 ## Environment Variables
@@ -62,6 +55,9 @@ wikidata-cli --json search-items "Douglas Adams"
 - `WD_VECTORDB_API_SECRET` (optional)
 - `USER_AGENT` (recommended to set a descriptive value)
 - `REQUEST_TIMEOUT_SECONDS` (default `15`)
+- `WIKIDATA_CLI_VERSION` (optional version override for `version` command)
+- `WIKIDATA_CLI_COMMIT` (optional commit override for `version` command)
+- `WIKIDATA_CLI_DATE` (optional date override for `version` command)
 
 ## Operational docs
 

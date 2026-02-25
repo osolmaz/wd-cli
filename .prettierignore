@@ -1,0 +1,5 @@
+dist/
+dist-test/
+node_modules/
+*.tgz
+docs/wikidata-cli/2026-02-24-wikidata-cli-implementation-plan.md
