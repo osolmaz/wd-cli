@@ -38,6 +38,12 @@ wd-cli --help
 
 `wd-cli` bundles a `wikidata` agent skill under `skills/wikidata`.
 
+The skill includes an entity-first workflow for common tasks:
+
+- resolve ambiguous names to candidate QIDs
+- build concise `company`/`person`/`place` profiles
+- drill into statements, hierarchy, or SPARQL only when needed
+
 List bundled skills:
 
 ```bash
@@ -79,10 +85,20 @@ wd-cli get-instance-and-subclass-hierarchy Q42 --max-depth 2
 wd-cli execute-sparql 'SELECT ?human WHERE { ?human wdt:P31 wd:Q5 } LIMIT 2'
 ```
 
+Entity-first workflow:
+
+```bash
+wd-cli resolve "Hartree" --limit 5
+wd-cli profile Q113465975 --type company
+wd-cli get-statement-values Q113465975 P17
+```
+
 JSON mode:
 
 ```bash
 wd-cli --json search-items "Douglas Adams"
+wd-cli --json resolve "Hartree"
+wd-cli --json profile Q113465975 --type company
 ```
 
 Equivalent one-shot usage with no install:
@@ -96,11 +112,11 @@ npx -y @osolmaz/wd-cli --json search-items "Douglas Adams"
 - `search-items <query>`
 - `search-properties <query>`
 - `resolve <query>`
-- `profile <entity-id>`
+- `profile <entity-id>` (`--type company|person|place`)
 - `get-statements <entity-id>`
 - `get-statement-values <entity-id> <property-id>`
 - `get-instance-and-subclass-hierarchy <entity-id>`
-- `execute-sparql <query>`
+- `execute-sparql [query]`
 
 ## Environment Variables
 

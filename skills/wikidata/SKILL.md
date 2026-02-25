@@ -1,6 +1,6 @@
 ---
 name: wikidata
-description: Use wd-cli for Wikidata lookup and querying tasks, including item/property search, statement inspection, hierarchy traversal, and SPARQL execution.
+description: Use wd-cli for Wikidata lookup and querying tasks, including name resolution, entity profiling, statement inspection, hierarchy traversal, and SPARQL execution.
 ---
 
 # wikidata
@@ -9,6 +9,8 @@ description: Use wd-cli for Wikidata lookup and querying tasks, including item/p
 
 Use this skill when a user asks to retrieve or inspect Wikidata information from the terminal, especially when they ask for:
 
+- disambiguating an entity name into likely QIDs
+- concise entity profile summaries (company/person/place)
 - item/property lookups by label
 - direct statements for an entity
 - values for a specific property on an entity
@@ -36,6 +38,8 @@ npx -y @osolmaz/wd-cli --help
 ```bash
 wd-cli search-items <query>
 wd-cli search-properties <query>
+wd-cli resolve <query>
+wd-cli profile <entity-id>
 wd-cli get-statements <entity-id>
 wd-cli get-statement-values <entity-id> <property-id>
 wd-cli get-instance-and-subclass-hierarchy <entity-id>
@@ -53,6 +57,13 @@ Useful aliases:
 
 ## High-signal usage patterns
 
+Resolve then profile (recommended default flow):
+
+```bash
+wd-cli resolve "Hartree" --limit 5
+wd-cli profile Q113465975 --type company
+```
+
 Search entities:
 
 ```bash
@@ -66,6 +77,7 @@ Inspect entity facts:
 wd-cli get-statements Q42
 wd-cli get-statement-values Q42 P106
 wd-cli hierarchy Q42 --max-depth 2
+wd-cli profile Q42 --type person
 ```
 
 Run SPARQL:
@@ -79,6 +91,8 @@ Machine-readable output:
 
 ```bash
 wd-cli --json search-items "Douglas Adams"
+wd-cli --json resolve "Hartree"
+wd-cli --json profile Q113465975 --type company
 wd-cli --json sparql --query 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2'
 ```
 
@@ -86,6 +100,8 @@ wd-cli --json sparql --query 'SELECT ?item WHERE { ?item wdt:P31 wd:Q5 } LIMIT 2
 
 - Default output is text; use `--json` for automation.
 - Prefer QIDs/PIDs when known (`Q42`, `P31`) to avoid ambiguity.
+- For ambiguous names, use `resolve` first, then run downstream commands on selected QID.
+- Use `profile --type company|person|place` for concise summaries before deep dives.
 - Use `--no-vector` on search commands when you need strict keyword search behavior.
 - Use `--timeout` for slow networks/services.
 - For SPARQL, provide only one query source at a time: positional arg, `--query`, or `--file`.
